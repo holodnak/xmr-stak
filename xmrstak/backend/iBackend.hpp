@@ -16,10 +16,12 @@ constexpr std::size_t countof(T const (&)[N]) noexcept
 
 namespace xmrstak
 {
+	const int num_backends = 5;
+
 	struct iBackend
 	{
 
-		enum BackendType : uint32_t { UNKNOWN = 0u, CPU = 1u, AMD = 2u, NVIDIA = 3u };
+		enum BackendType : uint32_t { UNKNOWN = 0u, CPU = 1u, AMD = 2u, NVIDIA = 3u, FPGA = 4u };
 		
 		static const char* getName(const BackendType type)
 		{
@@ -27,7 +29,8 @@ namespace xmrstak
 				"unknown",
 				"cpu",
 				"amd",
-				"nvidia"
+				"nvidia",
+				"fpga"
 			};
 
 			uint32_t i = static_cast<uint32_t>(type);

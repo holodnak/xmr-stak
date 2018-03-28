@@ -764,7 +764,7 @@ void executor::hashrate_report(std::string& out)
 	char num[32];
 	double fTotal[3] = { 0.0, 0.0, 0.0};
 
-	for( uint32_t b = 0; b < 4u; ++b)
+	for( uint32_t b = 0; b < xmrstak::num_backends; ++b)
 	{
 		std::vector<xmrstak::iBackend*> backEnds;
 		std::copy_if(pvThreads->begin(), pvThreads->end(), std::back_inserter(backEnds),

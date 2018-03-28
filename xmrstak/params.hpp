@@ -23,6 +23,7 @@ struct params
 	bool useAMD;
 	bool useNVIDIA;
 	bool useCPU;
+	bool useFPGA;
 
 	bool poolUseTls = false;
 	std::string poolURL;
@@ -44,6 +45,7 @@ struct params
 	std::string configFileAMD;
 	std::string configFileNVIDIA;
 	std::string configFileCPU;
+	std::string configFileFPGA;
 
 	bool allowUAC = true;
 	std::string minerArg0;
@@ -58,10 +60,12 @@ struct params
 		useAMD(true),
 		useNVIDIA(true),
 		useCPU(true),
+		useFPGA(true),
 		configFile("config.txt"),
 		configFilePools("pools.txt"),
 		configFileAMD("amd.txt"),
 		configFileCPU("cpu.txt"),
+		configFileFPGA("fpga.txt"),
 		configFileNVIDIA("nvidia.txt")
 	{}
 

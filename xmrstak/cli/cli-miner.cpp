@@ -74,8 +74,12 @@ void help()
 #endif
 	cout<<"  --benchmark BLOCKVERSION   ONLY do a 60-second benchmark and exit"<<endl;
 #ifndef CONF_NO_CPU
-	cout<<"  --noCPU                    disable the CPU miner backend"<<endl;
-	cout<<"  --cpu FILE                 CPU backend miner config file"<<endl;
+	cout << "  --noCPU                    disable the CPU miner backend" << endl;
+	cout << "  --cpu FILE                 CPU backend miner config file" << endl;
+#endif
+#ifndef CONF_NO_FPGA
+	cout << "  --noFPGA                   disable the FPGA miner backend" << endl;
+	cout << "  --fpga FILE                FPGA backend miner config file" << endl;
 #endif
 #ifndef CONF_NO_OPENCL
 	cout<<"  --noAMD                    disable the AMD miner backend"<<endl;
@@ -445,6 +449,10 @@ int main(int argc, char *argv[])
 		{
 			params::inst().useCPU = false;
 		}
+		else if(opName.compare("--noFPGA") == 0)
+		{
+			params::inst().useFPGA = false;
+		}
 		else if(opName.compare("--noAMD") == 0)
 		{
 			params::inst().useAMD = false;
@@ -463,6 +471,17 @@ int main(int argc, char *argv[])
 				return 1;
 			}
 			params::inst().configFileCPU = argv[i];
+		}
+		else if(opName.compare("--fpga") == 0)
+		{
+			++i;
+			if (i >= argc)
+			{
+				printer::inst()->print_msg(L0, "No argument for parameter '--fpga' given");
+				win_exit();
+				return 1;
+			}
+			params::inst().configFileFPGA = argv[i];
 		}
 		else if(opName.compare("--amd") == 0)
 		{

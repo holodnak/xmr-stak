@@ -267,6 +267,17 @@ else()
     list(APPEND BACKEND_TYPES "cpu")
 endif()
 
+###############################################################################
+# FPGA backend
+###############################################################################
+
+option(FPGA_ENABLE "Enable or disable FPGA support" ON)
+if(NOT FPGA_ENABLE)
+    add_definitions("-DCONF_NO_FPGA")
+else()
+    list(APPEND BACKEND_TYPES "fpga")
+endif()
+
 ################################################################################
 # Find PThreads
 ################################################################################
@@ -443,7 +454,8 @@ if(CMAKE_LINK_STATIC)
 endif()
 
 # compile C files
-file(GLOB SRCFILES_C "xmrstak/backend/cpu/crypto/*.c")
+file(GLOB SRCFILES_C 
+    "xmrstak/backend/cpu/crypto/*.c")
 
 add_library(xmr-stak-c
     STATIC
@@ -459,6 +471,7 @@ target_link_libraries(xmr-stak-c ${LIBS})
 file(GLOB BACKEND_CPP
     "xmrstak/*.cpp"
     "xmrstak/backend/cpu/*.cpp"
+    "xmrstak/backend/fpga/*.cpp"
     "xmrstak/backend/*.cpp"
     "xmrstak/backend/cpu/crypto/*.cpp"
     "xmrstak/http/*.cpp"

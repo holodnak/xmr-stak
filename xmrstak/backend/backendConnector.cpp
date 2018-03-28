@@ -31,6 +31,7 @@
 #include "xmrstak/params.hpp"
 
 #include "cpu/minethd.hpp"
+#include "fpga/minethd.hpp"
 #ifndef CONF_NO_CUDA
 #	include "nvidia/minethd.hpp"
 #endif
@@ -63,6 +64,16 @@ std::vector<iBackend*>* BackendConnector::thread_starter(miner_work& pWork)
 
 	std::vector<iBackend*>* pvThreads = new std::vector<iBackend*>;
 
+#ifndef CONF_NO_FPGA
+	if (params::inst().useFPGA)
+	{
+		auto fpgaThreads = fpga::minethd::thread_starter(static_cast<uint32_t>(pvThreads->size()), pWork);
+		pvThreads->insert(std::end(*pvThreads), std::begin(fpgaThreads), std::end(fpgaThreads));
+		if (fpgaThreads.size() == 0)
+			printer::inst()->print_msg(L0, "WARNING: backend FPGA disabled.");
+	}
+#endif
+
 #ifndef CONF_NO_CUDA
 	if(params::inst().useNVIDIA)
 	{
@@ -86,11 +97,11 @@ std::vector<iBackend*>* BackendConnector::thread_starter(miner_work& pWork)
 #endif
 
 #ifndef CONF_NO_CPU
-	if(params::inst().useCPU)
+	if (params::inst().useCPU)
 	{
 		auto cpuThreads = cpu::minethd::thread_starter(static_cast<uint32_t>(pvThreads->size()), pWork);
 		pvThreads->insert(std::end(*pvThreads), std::begin(cpuThreads), std::end(cpuThreads));
-		if(cpuThreads.size() == 0)
+		if (cpuThreads.size() == 0)
 			printer::inst()->print_msg(L0, "WARNING: backend CPU disabled.");
 	}
 #endif
